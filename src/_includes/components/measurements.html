@@ -1,32 +1,26 @@
-{% set measurement = point.measurements[0] %}
-{% set status = "empty" %}
+{% set measurement = point.measurements[0] %} {% set status = "empty" %} {% if
+measurement and measurement.value is defined and measurement.value is not none
+%} {% set status = measurement.value | statusChecker %} {% endif %}
 
-{% if measurement and measurement.value is defined and measurement.value is not none %}
-  {% set status = measurement.value | statusChecker %}
-{% endif %}
+<section>
+  <article class="{{ status }}">
+    <span class="ellipse {{ status }}" aria-hidden="true"></span>
 
-<article class="{{ status }}">
-  <span class="ellipse {{ status }}" aria-hidden="true"></span>
+    <h2>{{ point.location }}</h2>
 
-  <h2>{{ point.location }}</h2>
+    <p>
+      {{ point.city_id.name }} - {% if measurement and measurement.date is
+      defined and measurement.date is not none %} {{ measurement.date |
+      dateRefactor }} {% else %} No recent data {% endif %}
+    </p>
 
-  <p>
-    {{ point.city_id.name }} -
-    {% if measurement and measurement.date is defined and measurement.date is not none %}
-      {{ measurement.date | dateRefactor }}
-    {% else %}
-      No recent data
-    {% endif %}
-  </p>
+    <span class="value {{ status }}">
+      {% if measurement and measurement.value is defined and measurement.value
+      is not none %} {{ measurement.value | valueRefactor }} {% else %} N/A {%
+      endif %}
+    </span>
 
-  <span class="value {{ status }}">
-    {% if measurement and measurement.value is defined and measurement.value is not none %}
-      {{ measurement.value | valueRefactor }}
-    {% else %}
-      N/A
-    {% endif %}
-  </span>
-
-  <small>µg/m³</small>
-  <span class="status {{ status }}">{{ status }}</span>
-</article>
+    <small>µg/m³</small>
+    <span class="status {{ status }}">{{ status }}</span>
+  </article>
+</section>
